@@ -1,0 +1,48 @@
+use std::fs;
+
+use regex::Regex;
+
+fn main() {
+    println!("\n=== Day 4  ====");
+    println!("Opening intput.txt");
+
+    let inputs =
+        fs::read_to_string("src/bin/day_4/input.txt").expect("Unable to find 'input.txt' !");
+        // "2-4,6-8\n2-3,4-5\n5-7,7-9\n2-8,3-7\n6-6,4-6\n2-6,4-8\n\n".to_string();
+
+    let reg = Regex::new(r"^(\d+)-(\d+),(\d+)-(\d+)").expect("Failed to create Regex struct");
+    let mut contains_total: i32 = 0;
+
+    for x in inputs.split('\n') {
+        if x.is_empty() {
+            continue;
+        }
+
+        let capts = reg.captures(x).unwrap();
+
+        let elf1 = ElfRange {
+            from: capts[1].parse().unwrap(),
+            to: capts[2].parse().unwrap(),
+        };
+        let elf2 = ElfRange {
+            from: capts[3].parse().unwrap(),
+            to: capts[4].parse().unwrap(),
+        };
+
+        if fully_contains(&elf1, &elf2) {
+            contains_total += 1;
+        }
+    }
+
+    println!("\nPart one answer: {}", contains_total);
+    // println!("\nPart two answer: {}", total_badges);
+}
+
+fn fully_contains(a: &ElfRange, b: &ElfRange) -> bool {
+    return (a.from <= b.from && a.to >= b.to) || (b.from <= a.from && b.to >= a.to);
+}
+
+struct ElfRange {
+    from: i8,
+    to: i8,
+}
