@@ -2,7 +2,6 @@ use std::fs;
 
 fn main() {
     println!("\n=== Day 1  ====");
-    println!("Opening intput.txt");
 
     let mut biggests: [i32; 4] = [0, 0, 0, 0];
 

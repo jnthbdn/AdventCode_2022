@@ -10,7 +10,6 @@ const LOSE: i8 = 0;
 
 fn main() {
     println!("\n=== Day 2  ====");
-    println!("Opening intput.txt");
 
     let inputs =
         fs::read_to_string("src/bin/day_2/input.txt").expect("Unable to find 'input.txt' !");
