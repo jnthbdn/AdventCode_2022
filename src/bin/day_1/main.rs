@@ -6,7 +6,7 @@ fn main() {
 
     let mut biggests: [i32; 4] = [0, 0, 0, 0];
 
-    let inputs = fs::read_to_string("src/day_1/input.txt").expect("Unable to find 'input.txt' !");
+    let inputs = fs::read_to_string("src/bin/day_1/input.txt").expect("Unable to find 'input.txt' !");
 
     for x in inputs.split('\n'){
         if x.is_empty(){
