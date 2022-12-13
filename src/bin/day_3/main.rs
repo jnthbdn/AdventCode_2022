@@ -1,4 +1,4 @@
-use std::{fs, vec};
+use std::fs;
 
 fn main() {
     println!("\n=== Day 3  ====");
