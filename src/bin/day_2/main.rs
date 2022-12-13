@@ -9,7 +9,7 @@ const DRAW: i8 = 3;
 const LOSE: i8 = 0;
 
 fn main() {
-    println!("\n=== Day 1  ====");
+    println!("\n=== Day 2  ====");
     println!("Opening intput.txt");
 
     let inputs =
