@@ -4,7 +4,6 @@ use regex::Regex;
 
 fn main() {
     println!("\n=== Day 4  ====");
-    println!("Opening intput.txt");
 
     let inputs =
         fs::read_to_string("src/bin/day_4/input.txt").expect("Unable to find 'input.txt' !");
