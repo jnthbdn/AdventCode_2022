@@ -11,14 +11,14 @@ fn main() {
     let mut total_badges: i32 = 0;
     let mut pack: Vec<&str> = Vec::new();
 
-    for x in inputs.split('\n') {
-        if x.is_empty() {
+    for line in inputs.lines() {
+        if line.is_empty() {
             continue;
         }
 
         /* ===== FIRST PART ===== */
 
-        let (first, second) = x.split_at(x.len() / 2);
+        let (first, second) = line.split_at(line.len() / 2);
         let common = find_common(first, second);
 
         total_priority += letter_to_priority(common) as i32;
@@ -26,7 +26,7 @@ fn main() {
 
         /* ===== SECOND PART ===== */
 
-        pack.push(x);
+        pack.push(line);
         if pack.len() >= 3 {
             total_badges += letter_to_priority( find_badge(&pack) ) as i32;
             pack.clear();

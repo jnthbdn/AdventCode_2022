@@ -18,25 +18,27 @@ fn main() {
     let mut score_part_1: i32 = 0;
     let mut score_part_2: i32 = 0;
 
-    for x in inputs.split('\n') {
-        if x.is_empty() {
+    for line in inputs.lines() {
+        if line.is_empty() {
             continue;
         }
 
+        let bytes = line.as_bytes();
+
         /* ===== PART ONE ===== */
 
-        let elf = letter_to_shape(x.chars().nth(0).unwrap())
-            .expect(format!("Failed to parse line '{}'", x).as_str());
-        let me = letter_to_shape(x.chars().nth(2).unwrap())
-            .expect(format!("Failed to parse line '{}'", x).as_str());
+        let elf = letter_to_shape(bytes[0] as char)
+            .expect(format!("Failed to parse line '{}'", line).as_str());
+        let me = letter_to_shape(bytes[2] as char)
+            .expect(format!("Failed to parse line '{}'", line).as_str());
 
         score_part_1 += (battle(me, elf) + me) as i32;
 
         
         /* ===== PART ONE ===== */
 
-        let endgame = letter_to_endgame(x.chars().nth(2).unwrap())
-            .expect(format!("Failed to parse line '{}'", x).as_str());
+        let endgame = letter_to_endgame(bytes[2] as char)
+            .expect(format!("Failed to parse line '{}'", line).as_str());
         let me = match endgame {
             WIN => win_battle(elf),
             DRAW => elf,

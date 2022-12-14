@@ -7,15 +7,15 @@ fn main() {
 
     let inputs = fs::read_to_string("src/bin/day_1/input.txt").expect("Unable to find 'input.txt' !");
 
-    for x in inputs.split('\n'){
-        if x.is_empty(){
+    for line in inputs.lines(){
+        if line.is_empty(){
             biggests.sort();
             biggests.reverse();
 
             biggests[3] = 0;
         }
         else {
-            biggests[3] += x.parse::<i32>().unwrap();
+            biggests[3] += line.parse::<i32>().unwrap();
         }
     }
 

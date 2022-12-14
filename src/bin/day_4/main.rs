@@ -13,12 +13,12 @@ fn main() {
     let mut contains_total: i32 = 0;
     let mut overlap_total: i32 = 0;
 
-    for x in inputs.split('\n') {
-        if x.is_empty() {
+    for line in inputs.lines() {
+        if line.is_empty() {
             continue;
         }
 
-        let capts = reg.captures(x).unwrap();
+        let capts = reg.captures(line).unwrap();
 
         let elf1 = ElfRange {
             from: capts[1].parse().unwrap(),
