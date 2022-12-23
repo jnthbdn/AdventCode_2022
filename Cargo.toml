@@ -9,6 +9,7 @@ default-run = "advent_code_2022"
 
 [dependencies]
 regex = "1.7.0"
+lazy_static = "1.4.0"
 
 
 
