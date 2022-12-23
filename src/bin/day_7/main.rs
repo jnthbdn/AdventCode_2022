@@ -1,6 +1,6 @@
 use lazy_static::lazy_static;
 use regex::Regex;
-use std::{cell::RefCell, rc::Rc, fs};
+use std::{cell::RefCell, fs, rc::Rc};
 
 lazy_static! {
     static ref REGEX_CMD: Regex =
@@ -10,6 +10,9 @@ lazy_static! {
     static ref REGEX_LS_FILE: Regex =
         Regex::new(r"^(\d+) (\S+)$").expect("Failed to create Regex LS_FILE");
 }
+
+const DISK_SIZE: u32 = 70000000;
+const UPDATE_SIZE: u32 = 30000000;
 
 fn main() {
     println!("\n=== Day 7  ====");
@@ -22,7 +25,7 @@ fn main() {
     let mut is_ls_run = false;
 
     for line in inputs.lines() {
-        if line.is_empty(){
+        if line.is_empty() {
             continue;
         }
 
@@ -57,13 +60,28 @@ fn main() {
         }
     }
 
+    let folders_size = fs.root.borrow().get_folders_size();
+
+    /* ===== FIRST PART ===== */
     let mut result_one: u32 = 0;
-    for f in fs.root.borrow().get_folders_size().iter().filter(|f| f.1 <= 100000) {
+    for f in folders_size.iter().filter(|f| f.1 <= 100000) {
         result_one += f.1;
     }
 
     println!("\nPart one answer: {}", result_one);
-    // println!("\nPart two answer: {}", second_marker);
+
+    /* ===== SECOND PART ===== */
+    let needed_space = UPDATE_SIZE - (DISK_SIZE - fs.root.borrow().get_size());
+    let smaller_to_del = folders_size
+        .iter()
+        .filter(|f| f.1 >= needed_space)
+        .min_by(|x, y| x.1.cmp(&y.1))
+        .unwrap();
+
+    println!(
+        "\nPart two answer: {} ({})",
+        smaller_to_del.1, smaller_to_del.0
+    );
 }
 
 fn parse_command(line: &str) -> (String, Vec<String>) {
@@ -91,7 +109,7 @@ fn parse_ls_file(line: &str) -> (String, u32) {
 }
 
 struct File {
-    name: String,
+    _name: String,
     size: u32,
 }
 
@@ -155,7 +173,9 @@ impl FileSystem {
     }
 
     fn add_folder(&mut self, name: String) {
-        self.current.borrow_mut().add_folder(name, Rc::clone(&self.current));
+        self.current
+            .borrow_mut()
+            .add_folder(name, Rc::clone(&self.current));
     }
 
     fn add_file(&mut self, name: String, size: u32) {
@@ -197,7 +217,7 @@ impl Folder {
         self.files.push(File::new(name, size));
     }
 
-    fn get_folders_size(&self) -> Vec<(String, u32)>{
+    fn get_folders_size(&self) -> Vec<(String, u32)> {
         let mut result: Vec<(String, u32)> = Vec::new();
 
         for f in self.folders.iter() {
@@ -213,7 +233,7 @@ impl Folder {
 
 impl File {
     fn new(name: String, size: u32) -> Self {
-        File { name, size }
+        File { _name: name, size }
     }
 }
 
