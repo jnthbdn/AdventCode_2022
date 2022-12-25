@@ -9,6 +9,7 @@ fn main() {
 
     let mut trees = Trees::new();
     let mut visible_tree: u32 = 0;
+    let mut best_scenic = 0;
 
     for line in inputs.lines() {
         if line.is_empty() {
@@ -23,11 +24,13 @@ fn main() {
             if trees.is_tree_visible(x, y) {
                 visible_tree += 1;
             }
+
+            best_scenic = cmp::max(best_scenic, trees.tree_scenic_score(x, y));
         }
     }
 
     println!("\nPart one answer: {}", visible_tree);
-    // println!("\nPart two answer: {}", best_scenic);
+    println!("\nPart two answer: {}", best_scenic);
 }
 
 struct Trees {
@@ -106,5 +109,55 @@ impl Trees {
         }
 
         return true;
+    }
+
+
+    fn tree_scenic_score(&self, x: u32, y: u32) -> u32 {
+
+        if x == 0 || y == 0 || x >= (self.width - 1) || y >= (self.height - 1) {
+            return 0;
+        }
+
+        let mut score_top = 0;
+        let mut score_bot = 0;
+        let mut score_left = 0;
+        let mut score_right = 0;
+
+        let tree = self.get(x, y);
+
+        for i in (0..y).rev() {
+            score_top += 1;
+
+            if self.get(x, i) >= tree {
+                break;
+            }
+        }
+
+        for i in (y+1)..self.height {
+            score_bot += 1;
+
+            if self.get(x, i) >= tree {
+                break;
+            }
+        }
+
+        for i in (0..x).rev() {
+            score_left += 1;
+
+            if self.get(i, y) >= tree {
+                break;
+            }
+        }
+
+        for i in (x+1)..self.width {
+            score_right += 1;
+
+            if self.get(i, y) >= tree {
+                break;
+            }
+        }
+
+
+        return score_top * score_bot * score_left * score_right;
     }
 }
