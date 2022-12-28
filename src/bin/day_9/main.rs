@@ -1,5 +1,4 @@
-use std::{cmp, fs};
-
+use std::fs;
 use regex::Regex;
 
 fn main() {
@@ -92,7 +91,6 @@ struct Rope {
 
 impl Rope {
     fn new(nb_knots: usize) -> Self {
-
         if nb_knots == 0 {
             panic!("the number of knots must be > 0");
         }
@@ -122,7 +120,6 @@ impl Rope {
 
     fn update_tail(&mut self) {
         self.update_knot(0);
-
     }
 
     fn update_knot(&mut self, knot: usize) {
@@ -162,7 +159,7 @@ impl Rope {
                 panic!("Unknown case !! ({:?})", distance);
             }
 
-            self.update_knot(knot+1);
+            self.update_knot(knot + 1);
         }
     }
 
