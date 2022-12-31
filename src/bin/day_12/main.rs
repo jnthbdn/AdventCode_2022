@@ -17,17 +17,22 @@ fn main() {
         map.add_row(line);
     }
 
-    println!("\nPart one answer: {}", map.find_way());
-    // println!(
-    //     "\nPart two answer: {}",
-    //     play_turns(10_000, &mut monkeys_second, |x| x % (factor as u64))
-    // );
+    println!("");
+
+    println!("\nPart one answer: {}", map.find_way_from_start());
+    println!("\nPart two answer: {}", map.find_way_from_possible_starts());
 }
 
 #[derive(Default, Clone, Debug)]
 struct Point {
     x: i32,
     y: i32,
+}
+
+impl Point {
+    fn dist_from(&self, other: &Point) -> i32 {
+        (other.x - self.x).abs() + (other.y - self.y).abs()
+    }
 }
 
 impl PartialEq for Point {
@@ -52,6 +57,7 @@ struct Map {
     map: Vec<u32>,
     start: Point,
     end: Point,
+    possible_starts: Vec<Point>,
     width: u32,
     height: u32,
 }
@@ -62,6 +68,7 @@ impl Map {
             map: Vec::new(),
             start: Point::default(),
             end: Point::default(),
+            possible_starts: Vec::new(),
             width: 0,
             height: 0,
         }
@@ -80,6 +87,7 @@ impl Map {
                     self.start.x = i as i32;
                     self.start.y = self.height as i32;
                     self.map.push(self.char_to_height_value('a'));
+                    self.possible_starts.push(self.start.clone());
                 }
                 'E' => {
                     self.end.x = i as i32;
@@ -87,6 +95,13 @@ impl Map {
                     self.map.push(self.char_to_height_value('z'));
                 }
                 _ => {
+                    if c == 'a' {
+                        self.possible_starts.push(Point {
+                            x: i as i32,
+                            y: self.height as i32,
+                        });
+                    }
+
                     self.map.push(self.char_to_height_value(c));
                 }
             }
@@ -95,9 +110,17 @@ impl Map {
         self.height += 1;
     }
 
-    fn find_way(&self) -> u32 {
-        let mut visited: Vec<Point> = vec![self.start.clone()];
-        let mut heads: Vec<Point> = vec![self.start.clone()];
+    fn find_way_from_start(&self) -> u32 {
+        self.find_way(&vec![self.start.clone()])
+    }
+
+    fn find_way_from_possible_starts(&self) -> u32 {
+        self.find_way(&self.possible_starts)
+    }
+
+    fn find_way(&self, starts: &Vec<Point>) -> u32 {
+        let mut visited: Vec<Point> = starts.clone();
+        let mut heads: Vec<Point> = starts.clone();
         let mut steps: u32 = 0;
 
         while !heads.contains(&self.end) {
